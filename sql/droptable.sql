@@ -6,3 +6,4 @@ DROP TABLE IF EXISTS graduate_project.menus;
 DROP TABLE IF EXISTS graduate_project.orders;
 DROP TABLE IF EXISTS graduate_project.users;
 DROP TABLE IF EXISTS graduate_project.follow;
+DROP TABLE IF EXISTS graduate_project.payments;
