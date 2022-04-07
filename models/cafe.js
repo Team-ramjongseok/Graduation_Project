@@ -46,6 +46,6 @@ module.exports = class Cafe extends Sequelize.Model {
 
     static associate(db) {
         db.Cafe.hasMany(db.Menu);
-        ;
+        db.Cafe.hasMany(db.Payment);
     }
 };

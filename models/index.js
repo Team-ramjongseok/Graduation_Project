@@ -9,6 +9,7 @@ const Cafe = require('./cafe');
 const Menu = require('./menu');
 const Order = require('./order');
 const Payment = require('./payment');
+const Order_detail = require('./order_detail');
 
 const db = {};
 const sequelize = new Sequelize(
@@ -23,6 +24,7 @@ db.Cafe = Cafe;
 db.Menu = Menu;
 db.Order = Order;
 db.Payment = Payment;
+db.Order_detail = Order_detail;
 
 User.init(sequelize);
 Account.init(sequelize);
@@ -30,10 +32,15 @@ Cafe.init(sequelize);
 Menu.init(sequelize);
 Order.init(sequelize);
 Payment.init(sequelize);
+Order_detail.init(sequelize);
 
 User.associate(db);
 Account.associate(db);
 Cafe.associate(db);
 Menu.associate(db);
+Order.associate(db);
+Payment.associate(db);
+Order_detail.associate(db);
+
 
 module.exports = db;

@@ -15,25 +15,16 @@ module.exports = class Payment extends Sequelize.Model {
             sequelize,
             timestamps: false,
             underscored: false,
-            modelName: 'User',
-            tableName: 'users',
+            modelName: 'payment',
+            tableName: 'payments',
             paranoid: true,
             charset: 'utf8', // 한글 지원
             collate: 'utf8_general_ci', // 한글 지원
         });
     }
 
-    // static associate(db) {
-    //     db.User.hasMany(db.Post);
-    //     db.User.belongsToMany(db.User, {
-    //         foreignKey: 'followingId',
-    //         as: 'Followers',
-    //         through: 'Follow',
-    //     });
-    //     db.User.belongsToMany(db.User, {
-    //         foreignKey: 'followerId',
-    //         as: 'Followings',
-    //         through: 'Follow',
-    //     });
-    // }
+    static associate(db) {
+        db.Payment.belongsTo(db.Order);
+        db.Payment.belongsTo(db.Cafe);
+    }
 };
