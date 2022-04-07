@@ -38,6 +38,9 @@ User.associate(db);
 Account.associate(db);
 Cafe.associate(db);
 Menu.associate(db);
+Order.associate(db);
+Payment.associate(db);
 Order_detail.associate(db);
+
 
 module.exports = db;

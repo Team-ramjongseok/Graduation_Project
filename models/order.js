@@ -30,7 +30,11 @@ module.exports = class User extends Sequelize.Model {
 
     static associate(db) {
         db.Order.hasOne(db.Payment);
-        db.Order.belongsTo(db.User);
+        db.Order.belongsTo(db.User,{
+            foreignKey: 'id',
+            as: 'users',
+            through: 'User',
+        });
         db.Order.hasOne(db.Order_detail);
     }
 };
