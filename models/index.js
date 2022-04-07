@@ -36,5 +36,8 @@ Order_detail.init(sequelize);
 
 User.associate(db);
 Account.associate(db);
+Cafe.associate(db);
+Menu.associate(db);
+Order_detail.associate(db);
 
 module.exports = db;

@@ -7,8 +7,8 @@ module.exports = class Order_detail extends Sequelize.Model {
             sequelize,
             timestamps: false,
             underscored: false,
-            modelName: 'User',
-            tableName: 'users',
+            modelName: 'order_detail',
+            tableName: 'order_details',
             paranoid: true,
             charset: 'utf8', // 한글 지원
             collate: 'utf8_general_ci', // 한글 지원
