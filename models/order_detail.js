@@ -16,7 +16,17 @@ module.exports = class Order_detail extends Sequelize.Model {
     }
 
     static associate(db) {
-        db.User.belongsTo(db.Order);
-        db.User.belongsTo(db.Menu);
+        db.Order_detail.belongsTo(db.Order,{
+            foreignKey: 'id',
+            as: 'orders',
+            through: 'Order',
+            constraints: false
+        });
+        db.Order_detail.belongsTo(db.Menu,{
+            foreignKey: 'id',
+            as: 'menus',
+            through: 'Menu',
+            constraints: false
+        });
     }
 };

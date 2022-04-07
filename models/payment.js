@@ -24,7 +24,17 @@ module.exports = class Payment extends Sequelize.Model {
     }
 
     static associate(db) {
-        db.Payment.belongsTo(db.Order);
-        db.Payment.belongsTo(db.Cafe);
+        db.Payment.belongsTo(db.Order,{
+            foreignKey: 'id',
+            as: 'orders',
+            through: 'Order',
+            constraints: false
+        });
+        db.Payment.belongsTo(db.Cafe,{
+            foreignKey: 'id',
+            as: 'cafes',
+            through: 'Cafe',
+            constraints: false
+        });
     }
 };

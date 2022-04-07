@@ -34,6 +34,7 @@ module.exports = class User extends Sequelize.Model {
             foreignKey: 'id',
             as: 'users',
             through: 'User',
+            constraints: false
         });
         db.Order.hasOne(db.Order_detail);
     }
