@@ -33,5 +33,7 @@ Payment.init(sequelize);
 
 User.associate(db);
 Account.associate(db);
+Cafe.associate(db);
+Menu.associate(db);
 
 module.exports = db;

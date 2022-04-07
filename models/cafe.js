@@ -44,17 +44,8 @@ module.exports = class Cafe extends Sequelize.Model {
         });
     }
 
-    // static associate(db) {
-    //     db.User.hasMany(db.Post);
-    //     db.User.belongsToMany(db.User, {
-    //         foreignKey: 'followingId',
-    //         as: 'Followers',
-    //         through: 'Follow',
-    //     });
-    //     db.User.belongsToMany(db.User, {
-    //         foreignKey: 'followerId',
-    //         as: 'Followings',
-    //         through: 'Follow',
-    //     });
-    // }
+    static associate(db) {
+        db.Cafe.hasMany(db.Menu);
+        ;
+    }
 };
