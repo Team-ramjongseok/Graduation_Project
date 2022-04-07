@@ -29,6 +29,6 @@ module.exports = class Menu extends Sequelize.Model {
             as: 'cafes',
             through: 'Cafe',
         });
-        db.Menu.hasOne(order_detail);
+        db.Menu.hasOne(db.order_detail);
     }
 };
