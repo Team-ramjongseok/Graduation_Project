@@ -5,6 +5,8 @@ const env = process.env.NODE_ENV || 'development';
 const config = require('../config/config')[env];
 const User = require('./user');
 const Account = require('./account');
+const Cafe = require('./cafe');
+const Menu = require('./menu');
 
 const db = {};
 const sequelize = new Sequelize(
@@ -15,9 +17,13 @@ const sequelize = new Sequelize(
 db.sequelize = sequelize;
 db.User = User;
 db.Account = Account;
+db.Cafe = Cafe;
+db.Menu = Menu;
 
 User.init(sequelize);
 Account.init(sequelize);
+Cafe.init(sequelize);
+Menu.init(sequelize);
 
 // User.associate(db);
 
