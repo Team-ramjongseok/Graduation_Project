@@ -23,17 +23,8 @@ module.exports = class Payment extends Sequelize.Model {
         });
     }
 
-    // static associate(db) {
-    //     db.User.hasMany(db.Post);
-    //     db.User.belongsToMany(db.User, {
-    //         foreignKey: 'followingId',
-    //         as: 'Followers',
-    //         through: 'Follow',
-    //     });
-    //     db.User.belongsToMany(db.User, {
-    //         foreignKey: 'followerId',
-    //         as: 'Followings',
-    //         through: 'Follow',
-    //     });
-    // }
+    static associate(db) {
+        db.Payment.belongsTo(db.Order);
+        db.Payment.belongsTo(db.Cafe);
+    }
 };
