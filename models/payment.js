@@ -1,14 +1,13 @@
 const Sequelize = require('sequelize');
 
-module.exports = class Account extends Sequelize.Model {
+module.exports = class Payment extends Sequelize.Model {
     static init(sequelize) {
         return super.init({
-            account_num: {
-                type: Sequelize.STRING(20),
+            order_time: {
+                type: 'TIMESTAMP',
                 allowNull: false,
-                unique: true,
             },
-            bank: {
+            amount: {
                 type: Sequelize.STRING(20),
                 allowNull: false,
             },
@@ -16,8 +15,8 @@ module.exports = class Account extends Sequelize.Model {
             sequelize,
             timestamps: false,
             underscored: false,
-            modelName: 'Account',
-            tableName: 'accounts',
+            modelName: 'User',
+            tableName: 'users',
             paranoid: true,
             charset: 'utf8', // 한글 지원
             collate: 'utf8_general_ci', // 한글 지원
