@@ -8,6 +8,7 @@ const Account = require('./account');
 const Cafe = require('./cafe');
 const Menu = require('./menu');
 const Order = require('./order');
+const Payment = require('./payment');
 
 const db = {};
 const sequelize = new Sequelize(
@@ -21,13 +22,16 @@ db.Account = Account;
 db.Cafe = Cafe;
 db.Menu = Menu;
 db.Order = Order;
+db.Payment = Payment;
 
 User.init(sequelize);
 Account.init(sequelize);
 Cafe.init(sequelize);
 Menu.init(sequelize);
 Order.init(sequelize);
+Payment.init(sequelize);
 
-// User.associate(db);
+User.associate(db);
+Account.associate(db);
 
 module.exports = db;
