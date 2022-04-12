@@ -26,9 +26,8 @@ module.exports = class Account extends Sequelize.Model {
 
     static associate(db) {
         db.Account.belongsTo(db.User, {
-            foreignKey: 'id',
-            as: 'users',
-            through: 'User',
+            foreignKey: 'UserId',
+            targetKey : 'id',
         });
 
     }

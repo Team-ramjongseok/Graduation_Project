@@ -6,7 +6,7 @@ module.exports = class Cafe extends Sequelize.Model {
             name: {
                 type: Sequelize.STRING(20),
                 allowNull: false,
-                unique: true,
+                // unique: false 가게 이름은 같을 수도 있음
             },
             cafe_img: {
                 type: Sequelize.STRING(200),
@@ -45,7 +45,13 @@ module.exports = class Cafe extends Sequelize.Model {
     }
 
     static associate(db) {
-        db.Cafe.hasMany(db.Menu);
-        db.Cafe.hasMany(db.Payment);
+        db.Cafe.hasMany(db.Menu, { 
+            foreignKey: 'CafeId', 
+            sourceKey: 'id',
+        });
+        db.Cafe.hasMany(db.Payment, { 
+            foreignKey: 'CafeId', 
+            sourceKey: 'id',
+        });
     }
 };
