@@ -1,0 +1,1 @@
+insert into users (nickname, email, phone, password) values ('jonghyun', 'a@naver.com', '010-111-1111', 'qwer');

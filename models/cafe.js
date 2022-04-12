@@ -16,12 +16,12 @@ module.exports = class Cafe extends Sequelize.Model {
                 type: Sequelize.STRING(1000),
                 allowNull: false,
             },
-            operation: {
-                type: Sequelize.TINYINT,
+            operation: { 
+                type: Sequelize.STRING(100),
                 allowNull: false,
             },
             location: {
-                type: Sequelize.INTEGER,
+                type: Sequelize.STRING(10),
                 allowNull: true,
             },
             seat_empty: {

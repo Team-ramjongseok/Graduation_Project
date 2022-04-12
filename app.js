@@ -6,7 +6,7 @@ const session = require('express-session');
 const nunjucks = require('nunjucks');
 const dotenv = require('dotenv'); // 환경변수 관리. .env파일
 const passport = require('passport');
-
+const main = require('./routes/main');
 
 dotenv.config();  // 환경변수 관리. .env파일
 const { sequelize } = require('./models');
@@ -14,7 +14,7 @@ const { sequelize } = require('./models');
 const app = express();
 app.set('port', process.env.PORT || 8001); // 포트 설정. 포트를 나중에 env파일에 넣어줄 것임.
 
-sequelize.sync({ force : true })
+sequelize.sync({ force : false })
     .then(()=> {
         console.log('데이터베이스 연결 성공');
     })
@@ -23,11 +23,14 @@ sequelize.sync({ force : true })
     });
 
 
+    
 app.use(morgan('dev')); // 로그를 좀 더 구체적으로 보기위해,
 app.use(express.static(path.join(__dirname, 'public'))); // css는 정적파일이기 때문에, static으로 설정.
 app.use(express.json()); // json 사용.
 app.use(express.urlencoded({ extended: true })); // json의 중첩된 객체 허용. qs 모듈이 필요하다.
 app.use(cookieParser(process.env.COOKIE_SECRET));
+
+app.use('/main', main);
 
 app.use((req, res, next) => {
     const error = new Error(`${req.method} ${req.url} 라우터가 없습니다.`);
