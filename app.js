@@ -14,8 +14,13 @@ const { sequelize } = require('./models');
 
 const app = express();
 app.set('port', process.env.PORT || 8001); // 포트 설정. 포트를 나중에 env파일에 넣어줄 것임.
+app.set('view engine', 'html');
+nunjucks.configure('views', {
+    express: app,
+    watch: true,
+});
 
-sequelize.sync({ force : true })
+sequelize.sync({ force : false })
     .then(()=> {
         console.log('데이터베이스 연결 성공');
     })
@@ -30,6 +35,7 @@ app.use(express.static(path.join(__dirname, 'public'))); // css는 정적파일�
 app.use(express.json()); // json 사용.
 app.use(express.urlencoded({ extended: true })); // json의 중첩된 객체 허용. qs 모듈이 필요하다.
 app.use(cookieParser(process.env.COOKIE_SECRET));
+
 
 app.use('/main', main);
 app.use('/cafe', cafe);

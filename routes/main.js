@@ -1,17 +1,18 @@
 const router = require('express').Router();
 const User = require('../models').User;
 const userRepository = require('../repository/user');
+const cafeRepository = require('../repository/cafe');
 
 router.get('/', async (req, res)=> {
-    const a = await userRepository.findUser();
-    console.log("==============\n a:", a);
-    res.send(a);
+    try { 
+        const users = await userRepository.findUser();
+        const cafes = await cafeRepository.findCafes();
+        res.render('main',{users,cafes});       
+    } catch (err) {
+        console.error(err);
+        next(err);
+    }
 });
 
-router.get('/cafes', async (req, res)=> {
-    const b = await userRepository.hi();
-    console.log("==============\n a:", b);
-    res.send(b);
-});
 
 module.exports = router;
