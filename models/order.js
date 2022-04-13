@@ -12,10 +12,6 @@ module.exports = class User extends Sequelize.Model {
                 type: Sequelize.STRING(1000),
                 allowNull: false,
             },
-            menu_id: {
-                type: Sequelize.INTEGER,
-                allowNull: true,
-            },
         }, {
             sequelize,
             timestamps: false,
@@ -29,13 +25,17 @@ module.exports = class User extends Sequelize.Model {
     }
 
     static associate(db) {
-        db.Order.hasOne(db.Payment);
-        db.Order.belongsTo(db.User,{
-            foreignKey: 'id',
-            as: 'users',
-            through: 'User',
-            constraints: false
+        db.Order.hasOne(db.Payment, {
+            foreignKey: 'OrderId', 
+            sourceKey: 'id',
         });
-        db.Order.hasOne(db.Order_detail);
+        db.Order.belongsTo(db.User, {
+            foreignKey: 'UserId',
+            targetKey : 'id',
+        });
+        db.Order.hasOne(db.Order_detail, {
+            foreignKey: 'OrderId', 
+            sourceKey: 'id',
+        });
     }
 };

@@ -7,6 +7,7 @@ const nunjucks = require('nunjucks');
 const dotenv = require('dotenv'); // 환경변수 관리. .env파일
 const passport = require('passport');
 const main = require('./routes/main');
+const cafe = require('./routes/cafe');
 
 dotenv.config();  // 환경변수 관리. .env파일
 const { sequelize } = require('./models');
@@ -14,7 +15,7 @@ const { sequelize } = require('./models');
 const app = express();
 app.set('port', process.env.PORT || 8001); // 포트 설정. 포트를 나중에 env파일에 넣어줄 것임.
 
-sequelize.sync({ force : false })
+sequelize.sync({ force : true })
     .then(()=> {
         console.log('데이터베이스 연결 성공');
     })
@@ -31,6 +32,7 @@ app.use(express.urlencoded({ extended: true })); // json의 중첩된 객체 허
 app.use(cookieParser(process.env.COOKIE_SECRET));
 
 app.use('/main', main);
+app.use('/cafe', cafe);
 
 app.use((req, res, next) => {
     const error = new Error(`${req.method} ${req.url} 라우터가 없습니다.`);

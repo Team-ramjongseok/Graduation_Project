@@ -17,16 +17,12 @@ module.exports = class Order_detail extends Sequelize.Model {
 
     static associate(db) {
         db.Order_detail.belongsTo(db.Order,{
-            foreignKey: 'id',
-            as: 'orders',
-            through: 'Order',
-            constraints: false
+            foreignKey: 'OrderId',
+            targetKey : 'id',
         });
         db.Order_detail.belongsTo(db.Menu,{
-            foreignKey: 'id',
-            as: 'menus',
-            through: 'Menu',
-            constraints: false
+            foreignKey: 'MenuId',
+            targetKey : 'id',
         });
     }
 };
