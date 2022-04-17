@@ -11,6 +11,7 @@ const cafe = require('./routes/cafe');
 const payment = require('./routes/payment');
 
 dotenv.config();  // 환경변수 관리. .env파일
+const authRouter = require('./routes/auth'); //로그인 위해 auth.js와 연결
 const { sequelize } = require('./models');
 
 const app = express();
@@ -31,6 +32,8 @@ app.use(express.static(path.join(__dirname, 'public'))); // css는 정적파일�
 app.use(express.json()); // json 사용.
 app.use(express.urlencoded({ extended: true })); // json의 중첩된 객체 허용. qs 모듈이 필요하다.
 app.use(cookieParser(process.env.COOKIE_SECRET));
+
+app.use('/auth', authRouter);
 
 app.use('/main', main);
 app.use('/cafe', cafe);
