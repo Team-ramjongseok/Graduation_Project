@@ -8,7 +8,7 @@ module.exports = class Payment extends Sequelize.Model {
                 allowNull: false,
             },
             amount: {
-                type: Sequelize.STRING(20),
+                type: Sequelize.INTEGER,
                 allowNull: false,
             },
         }, {

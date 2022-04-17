@@ -17,13 +17,5 @@ const findCafeInfo = async (cafeId)=>{
     return result;
 }
 
-// CAFE 전체 정보 가져오는.
-const hi = async ()=> {
-    
-    console.log('result', result);
-    return result;
-}
-
-
 exports.findCafeInfo = findCafeInfo;
 
