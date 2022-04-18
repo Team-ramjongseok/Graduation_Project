@@ -13,7 +13,7 @@ router.get('/', async (req, res, next)=> {
         else {  // body에 cafeId값이 존재하지 않는 경우
             res.status(404).send('잘못된 접근입니다');
         }
-    } catch (error) {
+    } catch (error) {   
         console.error(error);
         next(error);
     }

@@ -6,7 +6,7 @@ module.exports = class User extends Sequelize.Model {
             order_status: {
                 type: Sequelize.STRING(5),
                 allowNull: false,
-                unique: true,
+                // unique: true, -> 이거 왜 넣음?
             },
             memo: {
                 type: Sequelize.STRING(1000),
