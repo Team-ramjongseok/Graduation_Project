@@ -1,15 +1,17 @@
 
 -- 유저 insert문
-insert into users (nickname, email, phone, password) 
-values ('jonghyun', 'a@naver.com', '010-111-1111', 'qwer');
-insert into users (nickname, email, phone, password)
-values ('yoon', 'jhb@naver.com', '010-111-1121', 'qwer');
+insert into users (nickname, email, phone, password,latitude,longitude) 
+values ('jonghyun', 'a@naver.com', '010-111-1111', 'qwer',37.547623, 127.068183);
+insert into users (nickname, email, phone, password,latitude,longitude)
+values ('yoon', 'jhb@naver.com', '010-111-1121', 'qwer',37.544065,127.074905);
 
 -- 카페 insert문
-insert into cafes (name, cafe_img, cafe_info, operation, location, seat_empty, seat_all)
-values ('starbucks','123', '자양동 스타벅스입니다.', '00:00-08:00', '서울 광진구 자양동', 3, 30);
-insert into cafes (name, cafe_img, cafe_info, operation, location, seat_empty, seat_all)
-values ('starbucks','123', '화양동 스타벅스입니다.', '00:00-08:00', '서울 광진구 화양동', 15, 50);
+insert into cafes (name, cafe_img, cafe_info, operation, location, seat_empty, seat_all,latitude,longitude)
+values ('starbucks','123', '자양동 스타벅스입니다.', '00:00-08:00', '서울 광진구 자양동', 3, 30,37.537327,127.082952);
+insert into cafes (name, cafe_img, cafe_info, operation, location, seat_empty, seat_all,latitude,longitude)
+values ('starbucks','123', '화양동 스타벅스입니다.', '00:00-08:00', '서울 광진구 화양동', 15, 50,37.546055,127.074047);
+insert into cafes (name, cafe_img, cafe_info, operation, location, seat_empty, seat_all,latitude,longitude)
+values ('starbucks','123', '뚝섬역점 스타벅스입니다.', '00:00-08:00', '서울 성동구 성수동', 25, 70,37.546427,127.049042);
 select * from cafes;
 
 -- 메뉴 insert문
