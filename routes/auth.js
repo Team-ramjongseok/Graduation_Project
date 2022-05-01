@@ -50,7 +50,6 @@ router.post('/join', async (req, res, next) => {
 });
 
 
-/*
 //로그인
 router.post('/login', async (req, res, next) => {
     
@@ -59,10 +58,19 @@ router.post('/login', async (req, res, next) => {
 
     try {
         //user가 존재하는지 확인
-        const userTemp = await User.findOne({ where: {email, password} });
-        console.log(userTemp);
-        if(userTemp) {
-
+        const exUser = await User.findOne({ where: {email, password} });
+        console.log(exUser);
+        if(exUser) {
+            console.log(`email: ${email}, password: ${password}`);
+            res.json({
+                message: 'login success',
+            });
+        }
+        else {
+            console.log('fail to login');
+            res.json({
+                message: 'login fail',
+            });
         }
         // , (err, user) => {
 
@@ -104,6 +112,6 @@ router.post('/logout', isLoggedIn, (req, res) => {
     req.session.destroy();
     res.redirect('/');
 });
-*/
+
 
 module.exports = router;
