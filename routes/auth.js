@@ -40,7 +40,7 @@ router.post('/join', async (req, res, next) => {
         // res.json({
         //     message: 'join success',
         //     token: user.token
-        // })
+        // });
 
 
     } catch (error) {
