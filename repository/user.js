@@ -22,13 +22,11 @@ function distanceCal(user,cafes) {
 // 유저를 찾는
 const findUser = async (username)=>{
     const [result, meatadata] = await sequelize.query('SELECT nickname,latitude,longitude  FROM USERS');
-    console.log("result : ", result); 
     return result;
 }
 
 const findMyProfile = async (username)=>{
     const [result, meatadata] = await sequelize.query(`SELECT nickname,latitude,longitude  FROM USERS WHERE nickname = "${username}"`);
-    console.log("result : ", result); 
     return result;
 }
 

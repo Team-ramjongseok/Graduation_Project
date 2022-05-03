@@ -18,8 +18,8 @@ router.post('/gps', async(req,res)=>{
     const my_profile = await userRepository.updateUser(latitude, longitude);
     const cafes = await userRepository.findCafes();
     const distanceResult =  await userRepository.nearCafes(my_profile,cafes);
-
     console.log(distanceResult);
+
     const latitude_li = distanceResult.reduce((prev,cur)=> {
         prev.push(cur.latitude);
         return prev;
@@ -31,8 +31,10 @@ router.post('/gps', async(req,res)=>{
     },[])
 
     res.json([{
+
         latitude: latitude_li,
         longitude: longitude_li,
+        distanceResult: distanceResult,
     
     }]);
 });
