@@ -8,10 +8,10 @@ router.get('/', async (req, res)=> {
     res.send(a);
 });
 
-router.get('/cafes', async (req, res)=> {
+router.get('/cafes', async (req, res, next)=> {
     const b = await userRepository.hi();
     console.log("==============\n a:", b);
     res.send(b);
 });
-
+ 
 module.exports = router;
