@@ -30,13 +30,13 @@ router.post('/gps', async(req,res)=>{
         return prev;
     },[])
 
-    res.json([{
+    res.json(
 
-        latitude: latitude_li,
-        longitude: longitude_li,
-        distanceResult: distanceResult,
-    
-    }]);
+        //latitude: latitude_li,
+        //longitude: longitude_li,
+        distanceResult,
+     
+    );
 });
 
 module.exports = router;
