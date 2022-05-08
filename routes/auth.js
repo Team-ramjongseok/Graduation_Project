@@ -10,6 +10,20 @@ const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
 const router = express.Router();
 
 
+//access token 생성
+const generateToken = ( email ) => {
+    return jwt.sign({email}, process.env.JWT_SECRET, {
+        expiresIn: "3600", //만료 1시간
+    });
+};
+
+//token refresh
+const refreshToken = ( email ) => {
+    return jwt.sign({ email }, process.env.REFRESH_SECRET, {
+        expiresIn: "360000" //만료 100시간
+    })
+}
+
 //신규 회원가입
 router.post('/join', async (req, res, next) => {
     const { email, nickname, password, phone } = req.body; //이메일과 패스워드를 바디에 저장
@@ -29,18 +43,16 @@ router.post('/join', async (req, res, next) => {
                 password,
                 phone,
             });
+            
+            let accessToken = generateToken(email); //토큰 생성
+            //console.log(email, nickname, accessToken);
             res.json({
                 message: 'join success',
                 nickname: req.body.nickname,
+                accessToken: accessToken,
             });
         }
         
-        //jwt 이용한 토큰 전송
-        // user.token = jwt.sign(user, process.env.JWT_SECRET);
-        // res.json({
-        //     message: 'join success',
-        //     token: user.token
-        // });
 
 
     } catch (error) {
