@@ -27,7 +27,7 @@ const findCafeInfo = async (cafeId)=>{
 }
 
 const updateCafe = async ()=> {
-    let sql = ("SELECT location  FROM cafes;");
+    let sql = ("SELECT location  FROM cafes where latitude is NULL and  longitude is NULL;");
     const [cafes, meatadata] = await sequelize.query(sql);
     const geocoder = nodeGeocoder(options);
 

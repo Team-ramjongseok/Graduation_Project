@@ -13,27 +13,23 @@ router.get('/', async (req, res)=> {
     
 });
 
-router.get('/geoCoder', async(req,res)=> {
+router.post('/gps', async(req,res)=>{
 
     await cafeRepository.updateCafe();
-
-});
-
-router.post('/gps', async(req,res)=>{
     const {latitude, longitude,nickname} = req.body;
     const my_profile = await userRepository.updateUser(latitude, longitude);
     const cafes = await userRepository.findCafes();
     const distanceResult =  await userRepository.nearCafes(my_profile,cafes);
 
-    const latitude_li = distanceResult.reduce((prev,cur)=> {
-        prev.push(cur.latitude);
-        return prev;
-    },[])
+    // const latitude_li = distanceResult.reduce((prev,cur)=> {
+    //     prev.push(cur.latitude);
+    //     return prev;
+    // },[])
 
-    const longitude_li = distanceResult.reduce((prev,cur)=> {
-        prev.push(cur.longitude);
-        return prev;
-    },[])
+    // const longitude_li = distanceResult.reduce((prev,cur)=> {
+    //     prev.push(cur.longitude);
+    //     return prev;
+    // },[])
 
     res.json([{
         distanceResult: distanceResult,
