@@ -9,6 +9,7 @@ const passport = require('passport');
 const main = require('./routes/main');
 const cafe = require('./routes/cafe');
 const payment = require('./routes/payment');
+const cors = require('cors'); // react 인증을 위한 cors 허용을 위해 사용하는 패키지
 
 dotenv.config();  // 환경변수 관리. .env파일
 const authRouter = require('./routes/auth'); //로그인 위해 auth.js와 연결
@@ -16,6 +17,7 @@ const { sequelize } = require('./models');
 
 const app = express();
 app.set('port', process.env.PORT || 8001); // 포트 설정. 포트를 나중에 env파일에 넣어줄 것임.
+
 
 sequelize.sync({ force : false })
     .then(()=> {
@@ -26,7 +28,10 @@ sequelize.sync({ force : false })
     });
 
 
-    
+app.use(cors({
+    origin: '*',
+    credential: 'true',
+}));
 app.use(morgan('dev')); // 로그를 좀 더 구체적으로 보기위해,
 app.use(express.static(path.join(__dirname, 'public'))); // css는 정적파일이기 때문에, static으로 설정.
 app.use(express.json()); // json 사용.

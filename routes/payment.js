@@ -64,7 +64,7 @@ router.post('/complete', async (req, res, next)=> {
                     const conn = await pool.getConnection();
                     try {
                         await conn.beginTransaction();
-                        const orderId = await paymentRepository.insertOrder('READY', custom_data.memo, custom_data.userId);
+                        const orderId = await paymentRepository.insertOrder('CHECK', custom_data.memo, custom_data.userId);
                         await paymentRepository.insertOrderDetail(custom_data.order_list, orderId);
                         await paymentRepository.insertPayment(amount, custom_data.cafeId, orderId);
                         await conn.commit();
