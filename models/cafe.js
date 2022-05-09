@@ -44,11 +44,6 @@ module.exports = class Cafe extends Sequelize.Model {
                 defaultValue: null,
                 validate: { min: -180, max: 180 }
             },
-            distance: {
-                type: Sequelize.DOUBLE,
-                allowNull: true,
-                defaultValue: null,
-            },
         }, {
             sequelize,
             timestamps: false,
