@@ -20,7 +20,7 @@ router.get('/', async (req, res, next)=> {
     }
 });
 
-// params에 cafeId를 넣어 보내는 경우, 그 cafeId를 기준으로 오늘의 결산 현황을 보내줌.
+// params에 cafeId를 넣어 보내는 경우, 그 cafeId를 기준으로 총 결산 현황을 보내줌.
 router.get('/payments', async (req, res, next)=> {
     console.log(req.query.cafeId);
     try{
