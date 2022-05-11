@@ -9,6 +9,7 @@ const passport = require('passport');
 const main = require('./routes/main');
 const cafe = require('./routes/cafe');
 const payment = require('./routes/payment');
+const webSocket = require('./socket');
 const cors = require('cors'); // react 인증을 위한 cors 허용을 위해 사용하는 패키지
 
 dotenv.config();  // 환경변수 관리. .env파일
@@ -31,12 +32,30 @@ sequelize.sync({ force : false })
 app.use(cors({
     origin: '*',
     credential: 'true',
-}));
+})); // 모든 cors에 대해 허용
+
 app.use(morgan('dev')); // 로그를 좀 더 구체적으로 보기위해,
 app.use(express.static(path.join(__dirname, 'public'))); // css는 정적파일이기 때문에, static으로 설정.
 app.use(express.json()); // json 사용.
 app.use(express.urlencoded({ extended: true })); // json의 중첩된 객체 허용. qs 모듈이 필요하다.
+
+
+const sessionMiddleware = session({
+    resave: false,
+    saveUninitialized: false,
+    secret: process.env.COOKIE_SECRET,
+    cookie: {
+      httpOnly: true,
+      secure: false,
+    },
+  });
+app.use(sessionMiddleware);
+
+
 app.use(cookieParser(process.env.COOKIE_SECRET));
+
+
+
 
 app.use('/auth', authRouter);
 
@@ -58,6 +77,9 @@ app.use((err, req, res, next) => {
     res.render('error');
 });
 
-app.listen(app.get('port'), ()=> {
+const server = app.listen(app.get('port'), ()=> {
     console.log(app.get('port') + '번에서 대기중');
 })
+
+
+webSocket(server, sessionMiddleware);
