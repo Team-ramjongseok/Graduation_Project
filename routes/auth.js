@@ -13,14 +13,14 @@ const router = express.Router();
 //access token 생성
 const generateToken = ( email ) => {
     return jwt.sign({email}, process.env.JWT_SECRET, {
-        expiresIn: "3600", //만료 1시간
+        expiresIn: Math.floor(Date.now()/1000) + (60*60), //만료 1시간
     });
 };
 
 //token refresh
-const refreshToken = ( email ) => {
+const generateRefreshToken = ( email ) => {
     return jwt.sign({ email }, process.env.REFRESH_SECRET, {
-        expiresIn: "360000" //만료 100시간
+        expiresIn: Math.floor(Date.now()/1000) + (60*60*10) //만료 10시간
     })
 }
 
@@ -37,10 +37,11 @@ router.post('/join', async (req, res, next) => {
             });
         }
         else {
+            const hash = await bcrypt.hash(password, 10); //비밀번호는 암호화 해서 저장
             await User.create({
                 email,
                 nickname,
-                password,
+                password: hash,
                 phone,
             });
             
@@ -50,11 +51,9 @@ router.post('/join', async (req, res, next) => {
                 message: 'join success',
                 nickname: req.body.nickname,
                 accessToken: accessToken,
+                expiresIn: expiresIn
             });
         }
-        
-
-
     } catch (error) {
         console.error(error);
         return next(error);
@@ -67,63 +66,77 @@ router.post('/login', async (req, res, next) => {
     
     const { email, password } = req.body; //클라이언트한테 받은 이메일과 패스워드
     
-
     try {
         //user가 존재하는지 확인
-        const exUser = await User.findOne({ where: {email, password} });
-        console.log(exUser);
-        if(exUser) {
-            console.log(`email: ${email}, password: ${password}`);
+        const exUser = await User.findOne({ where: {email} });
+        if(!exUser) {
+            const message= '존재하지 않는 사용자입니다';
+            console.log(message);
             res.json({
-                message: 'login success',
+                message: message
             });
         }
         else {
-            console.log('fail to login');
-            res.json({
-                message: 'login fail',
-            });
+            console.log(exUser);
+
+            const comparePassword = await bcrypt.compare(password, exUser.password); //암호화된 비밀번호와 비교
+            if(comparePassword) {
+                console.log(`email: ${email}, password: ${password}`);
+
+                let accessToken = generateToken(email);
+                let refreshToken = generateRefreshToken(email);
+                // console.log(`aT: ${accessToken}, rT: ${refreshToken}`);
+                res.json({
+                    message: 'login success',
+                    accessToken: accessToken,
+                    refreshToken: refreshToken,
+                    //expiresIn: expiresIn
+                });
+            }
+            else {
+                console.log('비밀번호 틀림');
+                res.json({
+                    message: 'wrong password'
+                });
+            }
         }
-        // , (err, user) => {
-
-        //     console.log("===user===\n", err, user);
-        //     if(err) { //에러 발생한 경우
-        //         console.log(`login err: ${err}`);
-        //         res.json({ 
-        //             message: `error occured: ${err}`,
-        //         })
-        //     }
-        //     else {
-        //         if(user) { //로그인 성공한 경우
-        //             console.log(`email: ${email}, password: ${password}`);
-        //             res.json({
-        //                 message: 'login success',
-        //                 token: user.token
-        //             });
-        //         }
-        //         else { // 아이디나 비밀번호가 틀렸을 경우
-        //             console.log('incorrect id or pw');
-        //             res.json({
-        //                 message: 'check id/pw',
-        //             });
-        //         }
-        //     }
-        // }).catch((err)=>{
-        //     console.log(err);
-        // });
-
+               
     } catch(error) {
         console.error(error);
         return next(error);
     }
 });
 
-//로그아웃
-router.post('/logout', isLoggedIn, (req, res) => {
-    req.logout();
-    req.session.destroy();
-    res.redirect('/');
-});
+
+//토큰 검증
+//accessToken을 전송해줘야 함
+// router.post('/token', (req, res, next) => {
+//     const { accessToken, refreshToken } = req.body;
+
+//     jwt.verify(refreshToken, JWT_SECRET, (err, decoded) => {
+//         if(err) {
+//             console.error(err);
+//         }
+//         else {
+//             console.log(decoded);
+//         }
+//     })
+// });
+
+// function checkToken(req) {
+
+// }
+
+
+
+
+
+// //로그아웃
+// router.post('/logout', isLoggedIn, (req, res) => {
+//     req.logout();
+//     req.session.destroy();
+//     res.redirect('/');
+// });
 
 
 module.exports = router;
