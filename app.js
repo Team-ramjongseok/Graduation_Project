@@ -12,6 +12,7 @@ const payment = require('./routes/payment');
 const webSocket = require('./socket');
 const cors = require('cors'); // react 인증을 위한 cors 허용을 위해 사용하는 패키지
 
+
 dotenv.config();  // 환경변수 관리. .env파일
 const authRouter = require('./routes/auth'); //로그인 위해 auth.js와 연결
 const { sequelize } = require('./models');

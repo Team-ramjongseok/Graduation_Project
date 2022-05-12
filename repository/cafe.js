@@ -1,7 +1,16 @@
 const {User, Cafe, Payment, Menu, Order, Account, Order_detail} = require('../models');
+const nodeGeocoder = require('node-geocoder');
 const Sequelize = require('Sequelize');
 const env = process.env.NODE_ENV || 'development';
 const config = require('../config/config')[env];
+const dotenv = require('dotenv');
+
+dotenv.config();  // 환경변수 관리. .env파일
+
+const options = {
+    provider:'google',
+    apiKey: process.env.APIKEY,
+};
 
 const sequelize = new Sequelize(config.database, config.username, config.password, config);
 
@@ -16,6 +25,7 @@ const findCafeInfo = async (cafeId)=>{
     );
     return result;
 }
+
 
 // 선택한 카페의 주문 현황을 가져오는 메소드. 선택한 카페의 cafeId를 input값으로 줌.
 const findCafePayment = async (cafeId) => {
@@ -39,6 +49,7 @@ const findCafePayment = async (cafeId) => {
     return result;
 }
 
+// cafeId를 input값으로 ready의 상태를 가지고 있는 payment의 정보 출력
 const findCafePaymentReady = async (cafeId) => {
 
   const [result, meatadata] = await sequelize.query(
@@ -60,6 +71,7 @@ const findCafePaymentReady = async (cafeId) => {
   return result;
 }
 
+// cafeId를 input값으로 comp의 상태를 가지고 있는 payment의 정보 출력
 const findCafePaymentComplete = async (cafeId) => {
 
   const [result, meatadata] = await sequelize.query(
@@ -81,8 +93,36 @@ const findCafePaymentComplete = async (cafeId) => {
   return result;
 }
 
-const findCafePaymentCheck = async (cafeId) => {
 
+
+const updateCafe = async ()=> {
+    let sql = ("SELECT location  FROM cafes where latitude is NULL and  longitude is NULL;");
+    const [cafes, meatadata] = await sequelize.query(sql);
+    const geocoder = nodeGeocoder(options);
+
+    for (let cafe of cafes) {
+        const locationName = cafe.location;
+        console.log(locationName);
+
+        try {
+            const regionLatLongResult = await geocoder.geocode(locationName);
+            const latitude = regionLatLongResult[0].latitude; //위도
+            const longitude =  regionLatLongResult[0].longitude //경도
+    
+            sql = (`UPDATE CAFES SET latitude=${latitude}, longitude=${longitude} WHERE location="${locationName}";`);
+            await sequelize.query(sql);
+        }  catch (error) {
+            console.error(error);
+            return next(error);
+        }
+    }
+
+
+}
+
+// cafeId를 input값으로 check의 상태를 가지고 있는 payment의 정보 출력
+const findCafePaymentCheck = async (cafeId) => {
+  
   const [result, meatadata] = await sequelize.query(
       `
       SELECT P.id, P.order_time, P.amount, O.order_status, O.memo, U.nickname, P.OrderId, GROUP_CONCAT(M.name SEPARATOR ', ') AS name
@@ -102,6 +142,7 @@ const findCafePaymentCheck = async (cafeId) => {
   return result;
 }
 
+// order_status를 check에서 ready로 바꾸는 함수
 const updateOrderCheckToReady = async (orderId) => {
   const [result, meatadata] = await sequelize.query(
     `
@@ -113,6 +154,7 @@ const updateOrderCheckToReady = async (orderId) => {
   return result;
 }
 
+// order_status를 ready에서 comp로 바꾸는 함수
 const updateOrderReadyToComp = async (orderId) => {
   const [result, meatadata] = await sequelize.query(
     `
@@ -124,6 +166,7 @@ const updateOrderReadyToComp = async (orderId) => {
   return result;
 }
 
+// cafeId 기준으로 현재 주문 상태별로 count해주는 함수
 const getStatusCount = async (cafeId) => {
 
   const [result, meatadata] = await sequelize.query(
@@ -148,3 +191,5 @@ exports.findCafePaymentReady = findCafePaymentReady;
 exports.updateOrderCheckToReady = updateOrderCheckToReady;
 exports.updateOrderReadyToComp = updateOrderReadyToComp;
 exports.getStatusCount = getStatusCount;
+exports.findCafeInfo = findCafeInfo;
+exports.updateCafe = updateCafe;

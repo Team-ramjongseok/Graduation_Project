@@ -13,12 +13,24 @@ module.exports = class User extends Sequelize.Model {
                 allowNull: false,
             },
             phone: {
-                type: Sequelize.STRING(20),
+                type: Sequelize.STRING(20), 
                 allowNull: false,
             },
             password: {
                 type: Sequelize.STRING(100),
                 allowNull: false,
+            },
+            latitude: {
+                type: Sequelize.DOUBLE,
+                allowNull: true,
+                defaultValue: null,
+                validate: { min: -90, max: 90 }
+            },
+            longitude: {
+                type: Sequelize.DOUBLE,
+                allowNull: true,
+                defaultValue: null,
+                validate: { min: -180, max: 180 }
             },
         }, {
             sequelize,
