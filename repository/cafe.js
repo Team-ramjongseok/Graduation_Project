@@ -43,7 +43,7 @@ const findCafePaymentReady = async (cafeId) => {
 
   const [result, meatadata] = await sequelize.query(
       `
-      SELECT P.id, P.order_time, P.amount, O.order_status, O.memo, U.nickname, GROUP_CONCAT(M.name SEPARATOR ', ') AS name
+      SELECT P.id, P.order_time, P.amount, O.order_status, O.memo, U.nickname, P.OrderId, GROUP_CONCAT(M.name SEPARATOR ', ') AS name
       FROM payments P
       JOIN orders O
       ON P.OrderId = O.id
@@ -85,7 +85,7 @@ const findCafePaymentCheck = async (cafeId) => {
 
   const [result, meatadata] = await sequelize.query(
       `
-      SELECT P.id, P.order_time, P.amount, O.order_status, O.memo, U.nickname, GROUP_CONCAT(M.name SEPARATOR ', ') AS name
+      SELECT P.id, P.order_time, P.amount, O.order_status, O.memo, U.nickname, P.OrderId, GROUP_CONCAT(M.name SEPARATOR ', ') AS name
       FROM payments P
       JOIN orders O
       ON P.OrderId = O.id
@@ -102,9 +102,49 @@ const findCafePaymentCheck = async (cafeId) => {
   return result;
 }
 
+const updateOrderCheckToReady = async (orderId) => {
+  const [result, meatadata] = await sequelize.query(
+    `
+    UPDATE orders
+       SET order_status = 'READY'
+     WHERE id=${orderId};
+    `
+  )
+  return result;
+}
+
+const updateOrderReadyToComp = async (orderId) => {
+  const [result, meatadata] = await sequelize.query(
+    `
+    UPDATE orders
+       SET order_status = 'COMP'
+     WHERE id= ${orderId};
+    `
+  )
+  return result;
+}
+
+const getStatusCount = async (cafeId) => {
+
+  const [result, meatadata] = await sequelize.query(
+      `
+      SELECT O.order_status, COUNT(O.order_status) AS count
+        FROM payments P
+        JOIN orders O
+          ON P.OrderId = O.id
+       WHERE P.CafeId = ${cafeId}
+       GROUP BY O.order_status;
+      `
+  )
+  return result;
+}
+
 
 exports.findCafeInfo = findCafeInfo;
 exports.findCafePayment = findCafePayment;
 exports.findCafePaymentCheck = findCafePaymentCheck;
 exports.findCafePaymentComplete = findCafePaymentComplete;
 exports.findCafePaymentReady = findCafePaymentReady;
+exports.updateOrderCheckToReady = updateOrderCheckToReady;
+exports.updateOrderReadyToComp = updateOrderReadyToComp;
+exports.getStatusCount = getStatusCount;

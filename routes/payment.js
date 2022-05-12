@@ -70,7 +70,7 @@ router.post('/complete', async (req, res, next)=> {
                         await conn.commit();
                         setTimeout(() => {
                             process.emit('cafeId=' + custom_data.cafeId, '결제 추가!');
-                        },2000); // 결제 추가 후, 2초 후 매장 클라이언트에게 추가됨을 웹소켓을 통해 알림. 
+                        }, 2000); // 결제 추가 후, 2초 후 매장 클라이언트에게 추가됨을 웹소켓을 통해 알림. 
                         res.send('success');
                     } catch (err) {
                         console.log(err);

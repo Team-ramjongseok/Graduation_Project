@@ -29,7 +29,7 @@ module.exports = (server) => {
 
     socket.on('disconnect', () => { // 연결 종료 시
       console.log('클라이언트 접속 해제', ip, socket.id, cafeId);
-      process.removeAllListeners(cafeId);
+      process.removeAllListeners(cafeId); // 클라이언트 접속 해제시, 
     });
 
     socket.on('error', (error) => { // 에러 시

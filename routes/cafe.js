@@ -85,4 +85,65 @@ router.get('/payments/complete', async (req, res, next)=> {
     }
 });
 
+
+router.get('/payments/status', async (req, res, next)=> {
+    console.log(req.query.cafeId);
+    try{
+        if(req.query.cafeId){
+            const result = await cafeRepository.getStatusCount(req.query.cafeId);
+            res.json(result);
+        }
+        else {  // params에 cafeId값이 존재하지 않는 경우
+            res.status(404).send('잘못된 접근입니다');
+        }
+    } catch (error) {   
+        console.error(error);
+        next(error);
+    }
+});
+
+
+
+router.post('/payments/post/check', async (req, res, next) => {
+    console.log(req.body, req.body.orderId);
+
+    try{
+        if(req.body.orderId){
+            const result = await cafeRepository.updateOrderCheckToReady(req.body.orderId);
+            console.log(result);
+            res.send("success");
+        }
+        else {  // params에 cafeId값이 존재하지 않는 경우
+            res.status(404).send('잘못된 접근입니다');
+        }
+    } catch (error) {   
+        console.error(error);
+        next(error);
+    }
+
+});
+
+
+router.post('/payments/post/ready', async (req, res, next) => {
+    console.log(req.body, req.body.orderId);
+
+    try{
+        if(req.body.orderId){
+            const result = await cafeRepository.updateOrderReadyToComp(req.body.orderId);
+            console.log(result);
+            res.send("success");
+        }
+        else {  // params에 cafeId값이 존재하지 않는 경우
+            res.status(404).send('잘못된 접근입니다');
+        }
+    } catch (error) {   
+        console.error(error);
+        next(error);
+    }
+    
+});
+
+
+
+
 module.exports = router;
