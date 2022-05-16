@@ -26,6 +26,75 @@ const findCafeInfo = async (cafeId)=>{
     return result;
 }
 
+
+// 선택한 카페의 주문 현황을 가져오는 메소드. 선택한 카페의 cafeId를 input값으로 줌.
+const findCafePayment = async (cafeId) => {
+
+    const [result, meatadata] = await sequelize.query(
+        `
+        SELECT P.id, P.order_time, P.amount, O.order_status, O.memo, U.nickname, GROUP_CONCAT(M.name SEPARATOR ', ') AS name
+        FROM payments P
+        JOIN orders O
+        ON P.OrderId = O.id
+        JOIN users U
+          ON O.UserId = U.id
+        JOIN order_details D
+          ON D.OrderId = O.id
+        JOIN menus M
+          ON M.id = D.MenuId
+        WHERE P.CafeId = ${cafeId}
+        GROUP BY P.id ;
+        `
+    )
+    return result;
+}
+
+// cafeId를 input값으로 ready의 상태를 가지고 있는 payment의 정보 출력
+const findCafePaymentReady = async (cafeId) => {
+
+  const [result, meatadata] = await sequelize.query(
+      `
+      SELECT P.id, P.order_time, P.amount, O.order_status, O.memo, U.nickname, P.OrderId, GROUP_CONCAT(M.name SEPARATOR ', ') AS name
+      FROM payments P
+      JOIN orders O
+      ON P.OrderId = O.id
+      JOIN users U
+        ON O.UserId = U.id
+      JOIN order_details D
+        ON D.OrderId = O.id
+      JOIN menus M
+        ON M.id = D.MenuId
+      WHERE P.CafeId = ${cafeId} AND O.order_status = 'READY'
+      GROUP BY P.id ;
+      `
+  )
+  return result;
+}
+
+// cafeId를 input값으로 comp의 상태를 가지고 있는 payment의 정보 출력
+const findCafePaymentComplete = async (cafeId) => {
+
+  const [result, meatadata] = await sequelize.query(
+      `
+      SELECT P.id, P.order_time, P.amount, O.order_status, O.memo, U.nickname, GROUP_CONCAT(M.name SEPARATOR ', ') AS name
+      FROM payments P
+      JOIN orders O
+      ON P.OrderId = O.id
+      JOIN users U
+        ON O.UserId = U.id
+      JOIN order_details D
+        ON D.OrderId = O.id
+      JOIN menus M
+        ON M.id = D.MenuId
+      WHERE P.CafeId = ${cafeId} AND O.order_status = 'COMP'
+      GROUP BY P.id ;
+      `
+  )
+  return result;
+}
+
+
+
 const updateCafe = async ()=> {
     let sql = ("SELECT location  FROM cafes where latitude is NULL and  longitude is NULL;");
     const [cafes, meatadata] = await sequelize.query(sql);
@@ -51,6 +120,76 @@ const updateCafe = async ()=> {
 
 }
 
+// cafeId를 input값으로 check의 상태를 가지고 있는 payment의 정보 출력
+const findCafePaymentCheck = async (cafeId) => {
+  
+  const [result, meatadata] = await sequelize.query(
+      `
+      SELECT P.id, P.order_time, P.amount, O.order_status, O.memo, U.nickname, P.OrderId, GROUP_CONCAT(M.name SEPARATOR ', ') AS name
+      FROM payments P
+      JOIN orders O
+      ON P.OrderId = O.id
+      JOIN users U
+        ON O.UserId = U.id
+      JOIN order_details D
+        ON D.OrderId = O.id
+      JOIN menus M
+        ON M.id = D.MenuId
+      WHERE P.CafeId = ${cafeId} AND O.order_status = 'CHECK'
+      GROUP BY P.id ;
+      `
+  )
+  return result;
+}
+
+// order_status를 check에서 ready로 바꾸는 함수
+const updateOrderCheckToReady = async (orderId) => {
+  const [result, meatadata] = await sequelize.query(
+    `
+    UPDATE orders
+       SET order_status = 'READY'
+     WHERE id=${orderId};
+    `
+  )
+  return result;
+}
+
+// order_status를 ready에서 comp로 바꾸는 함수
+const updateOrderReadyToComp = async (orderId) => {
+  const [result, meatadata] = await sequelize.query(
+    `
+    UPDATE orders
+       SET order_status = 'COMP'
+     WHERE id= ${orderId};
+    `
+  )
+  return result;
+}
+
+// cafeId 기준으로 현재 주문 상태별로 count해주는 함수
+const getStatusCount = async (cafeId) => {
+
+  const [result, meatadata] = await sequelize.query(
+      `
+      SELECT O.order_status, COUNT(O.order_status) AS count
+        FROM payments P
+        JOIN orders O
+          ON P.OrderId = O.id
+       WHERE P.CafeId = ${cafeId}
+       GROUP BY O.order_status;
+      `
+  )
+  return result;
+}
+
+
+exports.findCafeInfo = findCafeInfo;
+exports.findCafePayment = findCafePayment;
+exports.findCafePaymentCheck = findCafePaymentCheck;
+exports.findCafePaymentComplete = findCafePaymentComplete;
+exports.findCafePaymentReady = findCafePaymentReady;
+exports.updateOrderCheckToReady = updateOrderCheckToReady;
+exports.updateOrderReadyToComp = updateOrderReadyToComp;
+exports.getStatusCount = getStatusCount;
 exports.findCafeInfo = findCafeInfo;
 exports.updateCafe = updateCafe;
-
