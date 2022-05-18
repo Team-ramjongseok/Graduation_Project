@@ -64,10 +64,13 @@ router.post('/complete', async (req, res, next)=> {
                     const conn = await pool.getConnection();
                     try {
                         await conn.beginTransaction();
-                        const orderId = await paymentRepository.insertOrder('READY', custom_data.memo, custom_data.userId);
+                        const orderId = await paymentRepository.insertOrder('CHECK', custom_data.memo, custom_data.userId);
                         await paymentRepository.insertOrderDetail(custom_data.order_list, orderId);
                         await paymentRepository.insertPayment(amount, custom_data.cafeId, orderId);
                         await conn.commit();
+                        setTimeout(() => {
+                            process.emit('cafeId=' + custom_data.cafeId, '결제 추가!');
+                        }, 2000); // 결제 추가 후, 2초 후 매장 클라이언트에게 추가됨을 웹소켓을 통해 알림. 
                         res.send('success');
                     } catch (err) {
                         console.log(err);
