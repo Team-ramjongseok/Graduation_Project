@@ -12,15 +12,19 @@ const router = express.Router();
 
 //access token 생성
 const generateToken = ( email ) => {
+    console.log('inner expiration: '+ Math.floor(Date.now()/1000) + (60*60));
     return jwt.sign({email}, process.env.JWT_SECRET, {
-        expiresIn: Math.floor(Date.now()/1000) + (60*60), //만료 1시간
+        expiresIn: "12h" //만료 12시간
+        //expiresIn: Math.floor(Date.now()/1000) + (60*60), //만료 1시간
     });
+    
 };
 
 //token refresh
 const generateRefreshToken = ( email ) => {
     return jwt.sign({ email }, process.env.REFRESH_SECRET, {
-        expiresIn: Math.floor(Date.now()/1000) + (60*60*10) //만료 10시간
+        expiresIn: "30day" //만료 한달
+        //expiresIn: Math.floor(Date.now()/1000) + (60*60*10) //만료 10시간
     })
 }
 
@@ -32,7 +36,7 @@ router.post('/join', async (req, res, next) => {
     
        console.log("exUser == ",exUser);
         if(exUser) {
-            res.json({
+            res.status(405).json({
                 message: 'already exist',
             });
         }
@@ -51,7 +55,6 @@ router.post('/join', async (req, res, next) => {
                 message: 'join success',
                 nickname: req.body.nickname,
                 accessToken: accessToken,
-                expiresIn: expiresIn
             });
         }
     } catch (error) {
@@ -83,14 +86,16 @@ router.post('/login', async (req, res, next) => {
             if(comparePassword) {
                 console.log(`email: ${email}, password: ${password}`);
 
+                //로그인 성공하면 토큰을 발급
                 let accessToken = generateToken(email);
                 let refreshToken = generateRefreshToken(email);
-                // console.log(`aT: ${accessToken}, rT: ${refreshToken}`);
+                console.log(`aT: ${accessToken}, rT: ${refreshToken}`);
+                console.log(`expiresIn: ${accessToken.expiresIn}`);
                 res.json({
                     message: 'login success',
                     accessToken: accessToken,
                     refreshToken: refreshToken,
-                    //expiresIn: expiresIn
+                    nickname: exUser.nickname,
                 });
             }
             else {
@@ -108,25 +113,47 @@ router.post('/login', async (req, res, next) => {
 });
 
 
+//유저 정보를 가져올 부분
+router.get('/token', (req, res, next) => {
+    if(checkToken(req)) { //if token is valid
+        try {
+            const user = User.findOne({ where: {email} });
+            console.log("token accepted, sent user info");
+
+            res.json({
+                nickname: user.nickname,
+                email: user.email,
+            });
+        } catch(err) {
+            console.error(err);
+            return res.status(405).json({ message: err.message });
+        }        
+    }
+    else {
+        res.status(401).json({ message: 'invalid token' });
+    }
+});
+
+
+
 //토큰 검증
-//accessToken을 전송해줘야 함
-// router.post('/token', (req, res, next) => {
-//     const { accessToken, refreshToken } = req.body;
+//리프레시 토큰 따로 검증해줘야 함
+function checkToken(req) {
+    const token = req.headers['accessToken'];
+    //토큰 검증 성공한 경우
+    if(token) { 
+        try {
+            let decoded = jwt.verify(token, JWT_SECRET);
 
-//     jwt.verify(refreshToken, JWT_SECRET, (err, decoded) => {
-//         if(err) {
-//             console.error(err);
-//         }
-//         else {
-//             console.log(decoded);
-//         }
-//     })
-// });
-
-// function checkToken(req) {
-
-// }
-
+            return decoded.message === req.params.id;
+        } catch(err) {
+            return false;
+        }
+    }
+    else { //토큰이 invalid 한 경우
+        return false;
+    }
+}
 
 
 
