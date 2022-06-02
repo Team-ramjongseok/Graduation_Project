@@ -88,7 +88,7 @@ router.post('/login', async (req, res, next) => {
 
                 //로그인 성공하면 토큰을 발급
                 let accessToken = generateToken(email);
-                let refreshToken = generateRefreshToken(email);
+                let refreshToken = generateRefreshToken(email); 
                 console.log(`aT: ${accessToken}, rT: ${refreshToken}`);
                 console.log(`expiresIn: ${accessToken.expiresIn}`);
                 res.json({
@@ -98,7 +98,7 @@ router.post('/login', async (req, res, next) => {
                     nickname: exUser.nickname,
                 });
             }
-            else {
+            else { 
                 console.log('비밀번호 틀림');
                 res.json({
                     message: 'wrong password'
@@ -113,7 +113,7 @@ router.post('/login', async (req, res, next) => {
 });
 
 
-//유저 정보를 가져올 부분
+//유저 정보를 쏴줄 부분
 router.get('/token', (req, res, next) => {
     if(checkToken(req)) { //if token is valid
         try {
