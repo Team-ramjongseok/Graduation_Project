@@ -16,6 +16,23 @@ router.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, '../views/client_side.html'));
 });
 
+router.get("/userPayment", async (req, res, next) => {
+    console.log(req.query.userId);
+    try{
+        if(req.query.userId){
+            const result = await paymentRepository.getPaymentByUserId(req.query.userId);
+            res.json(result);
+        }
+        else {  // params에 cafeId값이 존재하지 않는 경우
+            res.status(404).send('잘못된 접근입니다');
+        }
+    } catch (error) {   
+        console.error(error);
+        next(error);
+    }
+});
+
+
 // 클라이언트에서 결제가 완료 시, 처리하는 부분.
 router.post('/complete', async (req, res, next)=> {
 

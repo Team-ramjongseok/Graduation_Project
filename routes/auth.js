@@ -96,7 +96,8 @@ router.post('/login', async (req, res, next) => {
                     accessToken: accessToken,
                     refreshToken: refreshToken,
                     nickname: exUser.nickname,
-                });
+                    id : exUser.id,
+                }); // id값 추가
             }
             else { 
                 console.log('비밀번호 틀림');

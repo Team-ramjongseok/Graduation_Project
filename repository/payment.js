@@ -82,6 +82,24 @@ const insertPayment = async (amount, cafeId, orderId)=> {
     await sequelize.query(sql);
 }
 
+
+const getPaymentByUserId = async (userId)=> {
+    const [result, meatadata] = await sequelize.query(
+        `
+        SELECT P.order_time, P.amount, C.name, C.location, O.order_status
+          FROM payments P
+          JOIN orders O
+            ON P.OrderId = O.id
+          JOIN cafes C
+            ON C.id = P.CafeId
+         WHERE O.UserId = ${userId};
+        `
+    );
+    return result;
+}
+
+
+exports.getPaymentByUserId = getPaymentByUserId;
 exports.sumMenuPrice = sumMenuPrice;
 exports.insertOrder = insertOrder;
 exports.insertOrderDetail = insertOrderDetail;
