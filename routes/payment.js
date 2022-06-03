@@ -62,6 +62,9 @@ router.post('/complete', async (req, res, next)=> {
 
         const paymentData = getPaymentData.data.response; // 조회한 결제 정보
         const custom_data = JSON.parse(paymentData.custom_data);
+        // console.log("=== custom_data === \n",custom_data);
+        custom_data.order_list = JSON.parse(custom_data.order_list);
+        console.log("=== custom_data === \n",custom_data);
         // paymentData.custom_data가 '{"userId":1,"cafeId":1,"order_list":[2,4],"memo":" 에스프레소 카페인은 빼주세요 ~ "}'
         // 이런식으로 오기때문에 json으로 파싱해야함.
 
