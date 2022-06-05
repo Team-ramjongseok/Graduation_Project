@@ -38,9 +38,9 @@ const findCafes = async ()=> {
 }
 
 // 위,경도 삽입
-const updateUser = async (latitude,longitude)=> {
+const updateUser = async (latitude,longitude,nickName)=> {
 
-    let sql = (`UPDATE USERS SET latitude=${latitude}, longitude=${longitude} WHERE id=1;`);
+    let sql = (`UPDATE USERS SET latitude=${latitude}, longitude=${longitude} WHERE nickname=${nickName};`);
     await sequelize.query(sql);
     sql = ("SELECT * from USERS WHERE id= 1;");
     const [result, meatadata] = await sequelize.query(sql)

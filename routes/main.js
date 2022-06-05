@@ -16,8 +16,8 @@ router.get('/', async (req, res)=> {
 router.post('/gps', async(req,res)=>{
 
     await cafeRepository.updateCafe();
-    const {latitude, longitude,nickname} = req.body;
-    const my_profile = await userRepository.updateUser(latitude, longitude);
+    const {latitude, longitude,nickName} = req.body;
+    const my_profile = await userRepository.updateUser(latitude, longitude,nickName);
     const cafes = await userRepository.findCafes();
     const distanceResult =  await userRepository.nearCafes(my_profile,cafes);
 
