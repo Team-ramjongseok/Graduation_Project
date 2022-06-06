@@ -4,11 +4,11 @@ const env = process.env.NODE_ENV || 'development';
 const config = require('../config/config')[env];
 const sequelize = new Sequelize(config.database, config.username, config.password, config);
 
-function distanceCal(user,cafes) {
+function distanceCal(latitude, longitude,cafes) {
     //CAFE 위,경도 NULL시 처리 해줘야함
     for (let cafe of cafes){ // 거리구하기
-        let x = (user[0].latitude - cafe.latitude) *100000.0 *0.884;
-        let y = (user[0].longitude - cafe.longitude) *100000.0 *1.110;
+        let x = (latitude - cafe.latitude) *100000.0 *0.884;
+        let y = (longitude - cafe.longitude) *100000.0 *1.110;
         cafe.distance = Math.sqrt((x*x)+(y*y));
     }
 
@@ -47,8 +47,8 @@ const updateUser = async (latitude,longitude,nickName)=> {
     return result;
 }
 // cafe 가까운순으로 return
-const nearCafes = async (user,cafes)=> {
-    const distanceResult = await distanceCal(user,cafes);
+const nearCafes = async (latitude, longitude,cafes)=> {
+    const distanceResult = await distanceCal(latitude, longitude,cafes);
     return distanceResult
 }
 

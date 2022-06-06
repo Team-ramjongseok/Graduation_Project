@@ -1,6 +1,6 @@
 
 -- 유저 insert문
-insert into users (nickname, email, phone, password,latitude,longitude) 
+insert into users (nickname, email, phone, password) 
 values ('jonghyun', 'a@naver.com', '010-111-1111', 'qwer',37.547623, 127.068183);
 insert into users (nickname, email, phone, password,latitude,longitude)
 values ('yoon', 'jhb@naver.com', '010-111-1121', 'qwer',37.544065,127.074905);
