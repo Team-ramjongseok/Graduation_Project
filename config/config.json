@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "root",
-    "password": "0000",
+    "password": "tkddls23",
     "database": "graduate_project",
     "host": "127.0.0.1",
     "dialect": "mysql"
