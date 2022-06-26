@@ -32,7 +32,7 @@ const findMyProfile = async (username)=>{
 
 // CAFE 전체 정보 가져오는.
 const findCafes = async ()=> {
-    const [result, meatadata] = await sequelize.query('SELECT name,cafe_info,location,seat_empty,seat_all,latitude,longitude FROM CAFES');
+    const [result, meatadata] = await sequelize.query('SELECT id,name,cafe_info,location,seat_empty,seat_all,latitude,longitude FROM CAFES');
     // console.log('result', result);
     return result;
 }
