@@ -8,6 +8,25 @@ router.get('/', async (req, res, next)=> {
     try{
         if(req.query.cafeId){
             const result = await cafeRepository.findCafeInfo(req.query.cafeId);
+            console.log(`sent: ${result}`);            
+            res.json(result[0]);
+        }
+        else {  // params에 cafeId값이 존재하지 않는 경우
+            
+            res.status(404).send('잘못된 접근입니다');
+        }
+    } catch (error) {   
+        console.error(error);
+        next(error);
+    }
+});
+
+// params에 cafeId를 넣어 보내는 경우, 그 cafeId를 기준으로 메뉴와 가게정보 보냄.
+router.post('/', async (req, res, next)=> {
+    
+    try{
+        if(req.query.cafeId){
+            const result = await cafeRepository.findCafeInfo(req.query.cafeId);
             res.json(result);
         }
         else {  // params에 cafeId값이 존재하지 않는 경우
@@ -18,6 +37,10 @@ router.get('/', async (req, res, next)=> {
         console.error(error);
         next(error);
     }
+
+    // res.json = {
+    //     cafe
+    // }
 });
 
 // params에 cafeId를 넣어 보내는 경우, 그 cafeId를 기준으로 총 결산 현황을 보내줌.
